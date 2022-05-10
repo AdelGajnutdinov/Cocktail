@@ -1,19 +1,22 @@
 //
-//  ViewController.swift
+//  ScrollViewController.swift
 //  Cocktail
 //
-//  Created by Adel Gainutdinov on 29.03.2022.
+//  Created by Adel Gainutdinov on 09.05.2022.
 //
 
 import UIKit
 import SnapKit
 
-class ViewController: UIViewController {
-
+class ScrollViewController: UIViewController, UIScrollViewDelegate {
+    let scrollView = UIScrollView()
+    let contentView = UIView()
+    var buttonsView = UIView()
+    
     private var dataFetcher: DataFetcher!
     private var drinks: [Drink]! {
         didSet {
-            setupViews()
+            setupButtonsView()
         }
     }
     
@@ -25,7 +28,10 @@ class ViewController: UIViewController {
         }
     }
     private var activityIndicator = UIActivityIndicatorView()
-    private var textField: UITextField?
+    private var textField: CustomTextField!
+    private var textFieldWidthConstraint1: Constraint?
+    private var textFieldWidthConstraint2: Constraint?
+    private var textFieldBottomConstraint: Constraint?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,7 +39,7 @@ class ViewController: UIViewController {
         // Observers
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tap)
         
         // ActivityIndicator
@@ -48,51 +54,57 @@ class ViewController: UIViewController {
         dataFetcher.fetchDrinks(with: ["a" : "Non_Alcoholic"]) { [unowned self] drinks in
             self.drinks = drinks
         }
-    }
-    
-    @objc func keyboardWillShow(notification: NSNotification) {
-        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            textField!.snp.remakeConstraints { make in
-                make.height.equalTo(40)
-                make.width.equalTo(view.frame.width * 0.8)
-                make.centerX.equalTo(view.snp.centerX)
-                make.bottom.equalTo(view).inset(keyboardSize.height + CGFloat(textField?.layer.shadowRadius ?? 0))
-            }
+        
+        // Views
+        self.view.addSubview(scrollView)
+        scrollView.snp.makeConstraints { make in
+            make.edges.equalTo(self.view.safeAreaLayoutGuide)
         }
-    }
-    
-    @objc func keyboardWillHide(notification: NSNotification) {
-        textField!.snp.remakeConstraints { make in
+        scrollView.delegate = self
+        scrollView.addSubview(contentView)
+        contentView.snp.makeConstraints { make in
+            make.top.bottom.leading.trailing.equalTo(self.scrollView)
+            make.width.equalTo(self.scrollView)
+        }
+        contentView.addSubview(buttonsView)
+        
+        // TextField
+        textField = CustomTextField()
+        textField.addTarget(self, action: #selector(textFieldEditingChanged), for: .editingChanged)
+        textField.delegate = self
+        view.addSubview(textField!)
+        textField.snp.makeConstraints { make in
             make.height.equalTo(40)
-            make.width.equalTo(view.frame.width * 0.8)
+            textFieldWidthConstraint1 = make.width.equalTo(view.frame.width * 0.8).constraint
+            textFieldWidthConstraint2 = make.width.equalTo(view.frame.width).constraint
+            textFieldWidthConstraint2!.deactivate()
             make.centerX.equalTo(view.snp.centerX)
-            make.bottom.equalTo(view).inset(200)
+            textFieldBottomConstraint = make.bottom.equalTo(view).inset(view.frame.height * 0.2).constraint
         }
     }
     
-    private func setupViews() {
+    private func setupButtonsView() {
         activityIndicator.stopAnimating()
         
+        var buttonsViewHeight: CGFloat = 0
         let offset: CGFloat = 8
         var isFirstInRow = true
         let viewWidth = view.frame.width
         var currentRowWidth: CGFloat = 0
-        var prevTopView = view.safeAreaLayoutGuide.snp.top
-        var prevLeadingView: UIView = view
+        var prevTopView = buttonsView.safeAreaLayoutGuide.snp.top
+        var prevLeadingView: UIView = buttonsView
         
         for i in 0..<drinks.count {
-            if i == 15 {
-                break //scrollView needed
-            }
             let buttonTitle = drinks[i].name
             let button = CustomButton()
             button.titleText = buttonTitle
             button.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
-            view.addSubview(button)
+            self.buttonsView.addSubview(button)
             buttons.append(button)
             button.snp.makeConstraints { make in
                 let buttonWidth = button.buttonTitleSize!.width + 20
-                make.height.equalTo(button.buttonTitleSize!.height + 20)
+                let buttonHeight = button.buttonTitleSize!.height + 20
+                make.height.equalTo(buttonHeight)
                 make.width.equalTo(buttonWidth)
                 
                 currentRowWidth += offset + buttonWidth
@@ -104,6 +116,7 @@ class ViewController: UIViewController {
                 if isFirstInRow {
                     make.leading.equalToSuperview().offset(offset)
                     isFirstInRow = false
+                    buttonsViewHeight += buttonHeight + offset
                 }
                 else {
                     make.leading.equalTo(prevLeadingView.snp.trailing).offset(offset)
@@ -113,23 +126,31 @@ class ViewController: UIViewController {
             }
         }
         
-        // TextField
-        textField = CustomTextField()
-        textField!.addTarget(self, action: #selector(textFieldEditingChanged), for: .editingChanged)
-        textField!.delegate = self
-        view.addSubview(textField!)
-        textField!.snp.makeConstraints { make in
-            make.height.equalTo(40)
-            make.width.equalTo(view.frame.width * 0.8)
-            make.centerX.equalTo(view.snp.centerX)
-            make.bottom.equalTo(view).inset(200)
+        buttonsView.snp.makeConstraints { make in
+            make.top.bottom.leading.trailing.equalTo(contentView)
+            make.height.equalTo(buttonsViewHeight)
         }
+    }
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            textFieldWidthConstraint1!.deactivate()
+            textFieldWidthConstraint2!.activate()
+            textFieldBottomConstraint!.update(inset: keyboardSize.height + CGFloat(textField?.layer.shadowRadius ?? 0))
+        }
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        textFieldWidthConstraint1!.activate()
+        textFieldWidthConstraint2!.deactivate()
+        textFieldBottomConstraint!.update(inset: view.frame.height * 0.2)
     }
     
     @objc func buttonAction(sender: CustomButton!) {
         if textField?.text?.count == 0 { // not in search mode
             selectedButton = sender
         }
+        dismissKeyboard()
     }
     
     @objc func dismissKeyboard() {
@@ -139,8 +160,9 @@ class ViewController: UIViewController {
     @objc func textFieldEditingChanged() {
         selectedButton = nil
         if let text = textField?.text, text.count > 0 {
+            let textLowercased = text.lowercased()
             buttons.forEach { button in
-                button.isSelected = button.titleText!.contains(text)
+                button.isSelected = button.titleText!.lowercased().contains(textLowercased)
             }
         } else {
             buttons.forEach { button in
@@ -150,7 +172,7 @@ class ViewController: UIViewController {
     }
 }
 
-extension ViewController: UITextFieldDelegate {
+extension ScrollViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         dismissKeyboard()
         return true

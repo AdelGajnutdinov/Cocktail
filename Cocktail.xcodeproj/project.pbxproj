@@ -8,9 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		BA8F9830E3CA4E7628563C3D /* Pods_Cocktail.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE1A6EDCB5AD3AA2A2DE5370 /* Pods_Cocktail.framework */; };
+		F5023E002829929E00D9C43E /* ScrollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5023DFF2829929E00D9C43E /* ScrollViewController.swift */; };
 		F5B22FB927F324B400E074BA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5B22FB827F324B400E074BA /* AppDelegate.swift */; };
 		F5B22FBB27F324B400E074BA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5B22FBA27F324B400E074BA /* SceneDelegate.swift */; };
-		F5B22FBD27F324B400E074BA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5B22FBC27F324B400E074BA /* ViewController.swift */; };
 		F5B22FC027F324B400E074BA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F5B22FBE27F324B400E074BA /* Main.storyboard */; };
 		F5B22FC227F324B700E074BA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F5B22FC127F324B700E074BA /* Assets.xcassets */; };
 		F5B22FC527F324B700E074BA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F5B22FC327F324B700E074BA /* LaunchScreen.storyboard */; };
@@ -27,10 +27,10 @@
 		61587EBE84802CF060FA5CB4 /* Pods-Cocktail.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Cocktail.debug.xcconfig"; path = "Target Support Files/Pods-Cocktail/Pods-Cocktail.debug.xcconfig"; sourceTree = "<group>"; };
 		D775674CE2A86E056FB7F821 /* Pods-Cocktail.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Cocktail.release.xcconfig"; path = "Target Support Files/Pods-Cocktail/Pods-Cocktail.release.xcconfig"; sourceTree = "<group>"; };
 		DE1A6EDCB5AD3AA2A2DE5370 /* Pods_Cocktail.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Cocktail.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F5023DFF2829929E00D9C43E /* ScrollViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollViewController.swift; sourceTree = "<group>"; };
 		F5B22FB527F324B400E074BA /* Cocktail.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cocktail.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5B22FB827F324B400E074BA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F5B22FBA27F324B400E074BA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		F5B22FBC27F324B400E074BA /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		F5B22FBF27F324B400E074BA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		F5B22FC127F324B700E074BA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F5B22FC427F324B700E074BA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -147,7 +147,7 @@
 		F5B22FE027F46DB300E074BA /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				F5B22FBC27F324B400E074BA /* ViewController.swift */,
+				F5023DFF2829929E00D9C43E /* ScrollViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -271,8 +271,8 @@
 				F5B22FDB27F3949D00E074BA /* UIView+Gradient.swift in Sources */,
 				F5B22FD127F329B600E074BA /* DrinksResponse.swift in Sources */,
 				F5B22FDD27F3957000E074BA /* UIColor+Hex.swift in Sources */,
-				F5B22FBD27F324B400E074BA /* ViewController.swift in Sources */,
 				F5B22FD827F38B7800E074BA /* CustomButton.swift in Sources */,
+				F5023E002829929E00D9C43E /* ScrollViewController.swift in Sources */,
 				F5B22FB927F324B400E074BA /* AppDelegate.swift in Sources */,
 				F5B22FD327F32BAC00E074BA /* API.swift in Sources */,
 				F5B22FDF27F4190500E074BA /* CustomTextField.swift in Sources */,

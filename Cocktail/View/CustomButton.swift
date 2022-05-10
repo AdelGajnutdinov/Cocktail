@@ -26,7 +26,7 @@ class CustomButton: UIButton {
             gradientLayer?.removeFromSuperlayer()
             if isSelected {
                 if gradientLayer == nil {
-                    gradientLayer = self.applyGradient(colours: [UIColor(hex: 0xEC666A), UIColor(hex: 0xEA62F7)])
+                    gradientLayer = self.applyGradient(colors: [UIColor(hex: 0xEC666A), UIColor(hex: 0xEA62F7)])
                 } else {
                     self.layer.insertSublayer(gradientLayer!, at: 0)
                 }
